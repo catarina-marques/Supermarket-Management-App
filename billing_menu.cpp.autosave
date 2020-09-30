@@ -1,7 +1,0 @@
-#include <iostream>
-#include "functions.h"
-using namespace std;
-void billing(){
-    printf( "Billing: To do.\nReturning to main menu.\n");
-    home();
-}
