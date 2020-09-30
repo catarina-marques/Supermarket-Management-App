@@ -40,7 +40,7 @@ public:
     std::vector<sItems_Sale> getlistitems_sale(unsigned int);
     void salerevenue_byproduct(unsigned int input_product_id, CProduct_Type typeslist, CProduct productlist);
     void salerevenue_byproducttype(unsigned int input_product_type_id, CProduct_Type typeslist, CProduct productlist);
-    void salerevenue_total();
+    void salerevenue_total(CProduct_Type typeslist, CProduct productlist);
 };
 
 #endif // CITEMS_SALE_H

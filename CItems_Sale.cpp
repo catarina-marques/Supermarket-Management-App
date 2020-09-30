@@ -241,4 +241,34 @@ void CItems_Sale::salerevenue_byproducttype(unsigned int input_product_type_id, 
     }
 
 }
-void CItems_Sale::salerevenue_total(){}
+void CItems_Sale::salerevenue_total(CProduct_Type typeslist, CProduct productlist){
+    CNodeItems_Sale *current = start;
+
+    if(start==NULL)
+        cout << "There are no sales registered." << endl;
+    else{
+        double total_revenue = 0;
+        double VAT_to_pay= 0;
+        double p_price;
+        unsigned int p_id, p_type;
+        int vat;
+        while(current!=NULL){
+
+            p_id = current->item_Sale.id_product;//get product id
+            p_type = productlist.product_type(p_id);//get product type
+            vat = typeslist.get_VAT(p_type);//get VAT of product type
+            p_price = current->item_Sale.products_cost;//get cost
+
+            total_revenue += p_price / (((double)vat+100.0f)/100.0f);//calculate total revenue without VAT
+            VAT_to_pay +=  (p_price  - (p_price / (((double)vat+100.0f)/100.0f)));// calcualte total VAT
+
+            current=current->next;
+        }
+
+        cout << setprecision(2) << fixed << "\nTotal revenue with VAT: " << total_revenue + VAT_to_pay << " euros" << endl;
+        cout << setprecision(2) << fixed << "Total revenue without VAT: " << total_revenue << " euros" << endl;
+        cout << setprecision(2) << fixed << "Taxes(VAT): " << VAT_to_pay << " euros " << endl;
+
+    }
+
+}

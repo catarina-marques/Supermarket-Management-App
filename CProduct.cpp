@@ -104,7 +104,7 @@ void CProduct::showsproduct(int index) const{
                 cout << "Name: " << current->product.product_name << endl;
                 cout << "Brand: " << current->product.product_brand << endl;
                 cout << "Type: " << current->product.product_type << endl;
-                cout << "Price: " << current->product.product_price << endl;
+                cout << "Price: " << current->product.market_price << endl;
                 cout << "Min Stock: " << current->product.product_min_stock << endl;
                 cout << "Max Stock: " << current->product.product_max_stock << endl;
                 cout << "Stock: " << current->product.product_stock << endl;
@@ -126,7 +126,7 @@ void CProduct::showsproduct_byid(unsigned int id) const{
                 cout << "Name: " << current->product.product_name << endl;
                 cout << "Brand: " << current->product.product_brand << endl;
                 cout << "Type: " << current->product.product_type << endl;
-                cout << "Price: " << current->product.product_price << endl;
+                cout << "Price: " << current->product.market_price << endl;
                 cout << "Min Stock: " << current->product.product_min_stock << endl;
                 cout << "Max Stock: " << current->product.product_max_stock << endl;
                 cout << "Stock: " << current->product.product_stock << endl;
@@ -166,7 +166,7 @@ void CProduct::showsproduct_byname(char soughtname[]) const{
                 cout << "Name: " << current->product.product_name << endl;
                 cout << "Brand: " << current->product.product_brand << endl;
                 cout << "Type: " << current->product.product_type << endl;
-                cout << "Price: " << current->product.product_price << endl;
+                cout << "Price: " << current->product.market_price << endl;
                 cout << "Min Stock: " << current->product.product_min_stock << endl;
                 cout << "Max Stock: " << current->product.product_max_stock << endl;
                 cout << "Stock: " << current->product.product_stock << endl;
@@ -206,7 +206,8 @@ void CProduct::all_products(void) const{
             cout << "Brand: " << current->product.product_brand << endl;
             cout << "Type ID: " << current->product.product_type << endl;
             //typeslist.get_product_type_name(current->product.product_type);
-            cout << "Price: " << current->product.product_price << endl;
+            cout << "Market price: " << current->product.market_price << endl;
+            cout << setprecision(2) << fixed << "Basic Price: " << current->product.basic_price << endl;
             cout << "Min Stock: " << current->product.product_min_stock << endl;
             cout << "Max Stock: " << current->product.product_max_stock << endl;
             cout << "Stock: " << current->product.product_stock << endl;
@@ -234,7 +235,7 @@ double CProduct::get_price(unsigned int soughtid)const{//returns price of this p
     while(current!=NULL){
         if(current->product.product_id == soughtid ){
             //cout << "price: " << current->product.selling_price ;
-            return (current->product.product_price);
+            return (current->product.market_price);
         }
         current = current -> next;
     }
@@ -297,7 +298,7 @@ void CProduct::editproduct_price(double newprice, unsigned int id){
         CNodeProduct *current = start;
         while( current != NULL ) {
             if (current->product.product_id == id){
-                current->product.product_price = newprice;
+                current->product.market_price = newprice;
             }
             current = current->next;
         }
@@ -345,7 +346,8 @@ void CProduct::showproducts_bytype(unsigned int id) const{
                 cout << "Product ID: " << current->product.product_id << endl;
                 cout << "Name: " << current->product.product_name << endl;
                 cout << "Brand: " << current->product.product_brand << endl;
-                cout << "Price: " << current->product.product_price << endl;
+                cout << setprecision(2) << fixed << "Market Price: " << current->product.market_price << endl;
+                cout << setprecision(2) << fixed << "Basic Price" << current->product.basic_price << endl;
                 cout << "Stock: " << current->product.product_stock << endl;
             }
             current = current->next;
@@ -482,7 +484,7 @@ void CProduct::inventory_value_byname(char soughtname[], CProduct_Type typeslist
                 cout << "Price: " << current->product.product_price << endl;
                 cout << "Stock: " << current->product.product_stock << endl;*/
                 vat = typeslist.get_VAT(current->product.product_type);
-                p_price = current->product.product_price;
+                p_price = current->product.market_price;
                 p_stock = current->product.product_stock;
                 value_whole_inventory_withoutVAT += (p_price * p_stock) / (((double)vat+100.0f)/100.0f);
                 VAT_to_pay +=  (p_price * p_stock) - (p_price * p_stock) / (((double)vat+100.0f)/100.0f) ;
@@ -511,7 +513,7 @@ void CProduct::inventory_value_bytype(unsigned int soughttype, CProduct_Type typ
         while( current != NULL ) {
             if (current->product.product_type == soughttype){
                 vat = typeslist.get_VAT(current->product.product_type);
-                p_price = current->product.product_price;
+                p_price = current->product.market_price;
                 p_stock = current->product.product_stock;
                 value_whole_inventory_withoutVAT += (p_price * p_stock) / (((double)vat+100.0f)/100.0f);
                 VAT_to_pay +=  (p_price * p_stock) - (p_price * p_stock) / (((double)vat+100.0f)/100.0f) ;
@@ -539,7 +541,7 @@ void CProduct::inventory_value(CProduct_Type typeslist) const{
         while(current!=NULL){
 
             vat = typeslist.get_VAT(current->product.product_type);
-            p_price = current->product.product_price;
+            p_price = current->product.market_price;
             p_stock = current->product.product_stock;
             value_whole_inventory_withoutVAT += (p_price * p_stock) / (((double)vat+100.0f)/100.0f);
             VAT_to_pay +=  (p_price * p_stock) - (p_price * p_stock) / (((double)vat+100.0f)/100.0f) ;
@@ -553,3 +555,55 @@ void CProduct::inventory_value(CProduct_Type typeslist) const{
     }
 }
 
+void CProduct::calc_basic_price(unsigned int sought_id, CProduct_Type typeslist){
+    if (start == NULL) return;
+    else {
+        double basic_price = 0;
+        CNodeProduct * current = start;
+        while( current != NULL ) {
+            if(current->product.product_id == sought_id){
+                int VAT;
+                int product_type;
+                product_type = current->product.product_type;
+                VAT = typeslist.get_VAT(product_type);
+                basic_price = current->product.market_price / (((double)VAT+100.0f)/100.0f);
+                current->product.basic_price = basic_price;//updates the basic price
+
+                //cout << setprecision(2) << fixed << "Market price: " << current->product.market_price << endl;
+                //cout << setprecision(2) << fixed << "Basic price calculated: " << basic_price << endl;
+                //cout << setprecision(2) << fixed << "current->product.basic_price" << current->product.basic_price << endl;
+            }
+            current = current->next;
+        }
+
+
+    }
+}
+unsigned int CProduct::getlastid(void) const{
+    CNodeProduct *current = start;
+    if(start==NULL) return 0;
+    while(current-> next != NULL){
+        current=current->next;
+    }
+    return(current->product.product_id);
+
+}
+void CProduct::update_basic_price_VAT_changed(unsigned int type_to_edit, int new_VAT){
+    if (start == NULL) return;
+    else {
+        double basic_price = 0;
+        CNodeProduct * current = start;
+        while( current != NULL ) {
+            if(current->product.product_type == type_to_edit){
+                basic_price = current->product.market_price / (((double)new_VAT+100.0f)/100.0f);
+                //cout << setprecision(2) << fixed << "Market price: " << current->product.market_price << endl;
+                //cout << setprecision(2) << fixed << "Basic price calculated: " << basic_price << endl;
+                current->product.basic_price = basic_price;//updates the basic price
+                //cout << setprecision(2) << fixed << "current->product.basic_price" << current->product.basic_price << endl;
+            }
+            current = current->next;
+        }
+
+
+    }
+}

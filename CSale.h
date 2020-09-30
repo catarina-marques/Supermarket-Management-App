@@ -31,6 +31,7 @@ public:
     void updatesale(sSale, unsigned int);
     void allsalesstats(void)const;
     void salestimeinterval(char[11],char[11]);
+
 };
 
 #endif // CSALE_H

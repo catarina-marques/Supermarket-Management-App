@@ -10,7 +10,7 @@
 #include "CItems_Order.h"
 #include <string>
 #include "string.h"
-
+#include <fstream>
 using namespace std;
 
 int main(){
@@ -27,44 +27,49 @@ int main(){
     CItems_Order itemsorderslist;
 
  //(CProduct_Type typeslist, CProduct productlist, CSale salelist, CItems_Sale itemssalelist, CSuppliers supplierslist, CSuppliers_Products suppliersproductslist,COrders orderslist, CItems_Order itemsorderslist)
+/*    sProduct_Type type1,type2;
 
-    sProduct addtest1,addtest2;
 
-    addtest1.product_id = 1 ;
-    strcpy(addtest1.product_name, "Iogurte Natural");
-    strcpy(addtest1.product_brand, "Danone");
-    addtest1.product_type = 1;
-    addtest1.product_price = 1.48;
-    addtest1.product_stock = 40;
-    addtest1.product_min_stock = 50;
-    addtest1.product_max_stock = 150;
-    productlist.insertproduct(addtest1);
+    strcpy(type2.product_type_name, "Canned Goods");
+    type2.product_type_VAT = 13;
+    typeslist.addtype(type2);
 
-    addtest2.product_id = 2 ;
-    strcpy(addtest2.product_name, "Iogurte Grego Morango");
-    strcpy(addtest2.product_brand, "Mimosa");
-    addtest2.product_type = 1;
-    addtest2.product_price = 2.69;
-    addtest2.product_stock = 10;
-    addtest2.product_min_stock = 30;
-    addtest2.product_max_stock = 150;
-    productlist.insertproduct(addtest2);
-    cout << "Here's some products to test." << endl;
-    productlist.all_products();
 
-    sProduct_Type type1,type2;
-
-    type1.type_id = 1;
     strcpy(type1.product_type_name, "Milk and Dairy");
     type1.product_type_VAT = 6;
     typeslist.addtype(type1);
 
-    type2.type_id = 2;
-    strcpy(type2.product_type_name, "Canned Goods");
-    type2.product_type_VAT = 13;
-    typeslist.addtype(type2);
+
+
     cout << "Here's some types of products to test." << endl;
     typeslist.all_producttypes();
+
+    sProduct addtest1,addtest2;
+
+    //addtest1.product_id = 1 ;
+    strcpy(addtest1.product_name, "Iogurte Natural");
+    strcpy(addtest1.product_brand, "Danone");
+    addtest1.product_type = 1;
+    addtest1.market_price = 1.48;
+    addtest1.product_stock = 40;
+    addtest1.product_min_stock = 50;
+    addtest1.product_max_stock = 150;
+    productlist.insertproduct(addtest1);
+    productlist.calc_basic_price(1,typeslist);
+
+    //addtest2.product_id = 2 ;
+    strcpy(addtest2.product_name, "Iogurte Grego Morango");
+    strcpy(addtest2.product_brand, "Mimosa");
+    addtest2.product_type = 1;
+    addtest2.market_price = 2.69;
+    addtest2.product_stock = 10;
+    addtest2.product_min_stock = 30;
+    addtest2.product_max_stock = 150;
+    productlist.insertproduct(addtest2);
+    productlist.calc_basic_price(2,typeslist);
+    cout << "Here's some products to test." << endl;
+    productlist.all_products();
+
 
     sSuppliers supplier1,supplier2;
 
@@ -96,6 +101,11 @@ int main(){
     supplier_product2.discount = 20;
     supplier_product2.min_order_discount = 70;
     suppliersproductslist.insertsupplier_product(supplier_product2);
+*/
+    //fstream file_type("typesfile.txt", ios::in|ios::out|ios::binary);
+
+
+
 
     home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
 

@@ -31,6 +31,9 @@ public:
     bool id_exists(unsigned int)const;
     int get_VAT(unsigned int type_product_to_order)const;
     void get_product_type_name(unsigned int soughttype_id)const;
+    void loadfromfile(CProduct_Type &typeslist);
+    void loadfromlist(CProduct_Type typeslist);
+
 };
 
 #endif // CPRODUCT_TYPE_H

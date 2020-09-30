@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "functions.h"
 #include "CProduct.h"
 #include <string>
@@ -41,7 +42,7 @@ void products(CProduct_Type typeslist, CProduct productlist, CSale salelist, CIt
 }
 
 void addproduct(CProduct_Type typeslist, CProduct productlist, CSale salelist, CItems_Sale itemssalelist, CSuppliers supplierslist, CSuppliers_Products suppliersproductslist,COrders orderslist, CItems_Order itemsorderslist){
-    //unsigned int input_id_code;
+
     char input_name[100];
     char input_brand[50];
     unsigned int input_type_id;
@@ -134,11 +135,20 @@ void addproduct(CProduct_Type typeslist, CProduct productlist, CSale salelist, C
             strcpy(addedproduct.product_name, input_name);
             strcpy(addedproduct.product_brand, input_brand);
             addedproduct.product_type = input_type_id;
-            addedproduct.product_price = input_price;
+            addedproduct.market_price = input_price;
             addedproduct.product_min_stock = input_min_stock;
             addedproduct.product_max_stock = input_max_stock;
             addedproduct.product_stock = input_stock;
             productlist.insertproduct(addedproduct);
+            unsigned int newproduct_id;
+            newproduct_id =productlist.getlastid();
+            productlist.calc_basic_price(newproduct_id,typeslist);
+            //write to binary files
+            ofstream file("products_list", ios::binary);
+               if (!file.is_open()){
+                   cout << "Could not open file to write";
+                   return;
+               }
             cout << "\nNew product added!" << endl;
             home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
             break;
@@ -243,6 +253,7 @@ void editingproduct(CProduct_Type typeslist, CProduct productlist, CSale salelis
         cin.ignore(numeric_limits<streamsize>::max(),'\n');
 
         productlist.editproduct_type(input_type_id,idcodesearch);
+        productlist.calc_basic_price(idcodesearch,typeslist);//VAT could change, this covers it.
         cout << "Product edited. Returning to main menu. " << endl;
         home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
         break;
@@ -259,6 +270,7 @@ void editingproduct(CProduct_Type typeslist, CProduct productlist, CSale salelis
         cin.ignore(numeric_limits<streamsize>::max(),'\n');
 
         productlist.editproduct_price(input_selling_price,idcodesearch);
+        productlist.calc_basic_price(idcodesearch,typeslist);
         cout << "Product edited. Returning to main menu. " << endl;
         home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
         break;

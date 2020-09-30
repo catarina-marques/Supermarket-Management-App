@@ -4,6 +4,8 @@
 #include <limits>
 #include <string>
 #include "string.h"
+#include <iomanip>
+#include <fstream>
 using namespace std;
 
 void addproducttype(CProduct_Type typeslist, CProduct productlist, CSale salelist, CItems_Sale itemssalelist, CSuppliers supplierslist, CSuppliers_Products suppliersproductslist,COrders orderslist, CItems_Order itemsorderslist);
@@ -12,8 +14,12 @@ void editproducttype(CProduct_Type typeslist, CProduct productlist, CSale saleli
 void deleteproducttype(CProduct_Type typeslist, CProduct productlist, CSale salelist, CItems_Sale itemssalelist, CSuppliers supplierslist, CSuppliers_Products suppliersproductslist,COrders orderslist, CItems_Order itemsorderslist);
 
 void typeproductoptions(CProduct_Type typeslist, CProduct productlist, CSale salelist, CItems_Sale itemssalelist, CSuppliers supplierslist, CSuppliers_Products suppliersproductslist,COrders orderslist, CItems_Order itemsorderslist){
+
+    typeslist.loadfromfile(typeslist);
+
     char option = 0;
-    cout << "\nProducts:\n1-Add a type | 2-Edit a type | 3-Delete a type | 4-List of types | 5-Back\n" << endl;
+    cout << "\nTypes:\n1-Add a type | 2-Edit a type | 3-Delete a type | 4-List of types | 5-Back\n" << endl;
+
     cout << "Enter option: ";
     scanf(" %c", &option);
     while ((getchar()) != '\n');
@@ -27,11 +33,12 @@ void typeproductoptions(CProduct_Type typeslist, CProduct productlist, CSale sal
     case '3' :
         deleteproducttype(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
         break;
-    case '4' :
+    case '4' :{
         cout << "List all. FOR TESTING PURPOSES." << endl;
         typeslist.all_producttypes();
         home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
         break;
+    }
     case '5' :
         cout << "\nGoing back..." << endl;
         home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
@@ -67,7 +74,7 @@ void addproducttype(CProduct_Type typeslist, CProduct productlist, CSale salelis
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(),'\n');
 
-    cout << "\nEditing new type:\n";
+    cout << "\nAdding new type:\n";
     cout << "Name: " << input_name << endl;
     cout << "VAT: " << input_VAT << endl;
 
@@ -83,7 +90,17 @@ void addproducttype(CProduct_Type typeslist, CProduct productlist, CSale salelis
         strcpy(newtype.product_type_name,input_name);
         newtype.product_type_VAT = input_VAT;
         typeslist.addtype(newtype);
-        cout << "\nType edited!" << endl;
+
+/*        fstream file_type("typesfile.txt", ios::app|ios::binary);
+        if(!file_type.is_open()){
+            cout <<"Could not open file. Returing to Main Menu." << endl;
+            home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
+        }
+        //this is the part where i actually add the data to the binary file.
+        file_type.write((const char *) &newtype, sizeof(newtype));
+        cout << "\nType added!" << endl;
+        file_type.close();*/
+
         home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
         break;
     }
@@ -158,7 +175,7 @@ void editingproducttype(CProduct_Type typeslist, CProduct productlist, CSale sal
     editedtype.product_type_VAT = input_VAT;
 
     typeslist.edittype(editedtype,idcodesearch);
-
+    productlist.update_basic_price_VAT_changed(idcodesearch, input_VAT);
     cout << "Returning to main menu." << endl;
     home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
 }

@@ -15,12 +15,12 @@ struct sProduct{
     char product_name[100];
     char product_brand[50];
     unsigned int product_type;
-    double product_price; //c/iva incluido 23%
+    double market_price; // with VAT
+    double basic_price;//
     int product_stock, product_min_stock, product_max_stock;
 };
 
 class CNodeProduct{
-//private:  // é indiferente estar ou não comentado
     struct sProduct product;
     CNodeProduct *next;
     friend class CProduct;
@@ -58,6 +58,9 @@ public:
     void inventory_value_byname(char soughtname[], CProduct_Type typeslist) const;
     void inventory_value_bytype(unsigned int soughttype, CProduct_Type typeslist) const;
     void inventory_value(CProduct_Type typeslist) const;
+    void calc_basic_price(unsigned int sought_id,CProduct_Type);
+    unsigned int getlastid(void)const;
+    void update_basic_price_VAT_changed(unsigned int type_to_edit, int new_VAT);
 };
 
 #endif // PRODUCT_H

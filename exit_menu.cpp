@@ -10,6 +10,7 @@ int exit(CProduct_Type typeslist, CProduct productlist, CSale salelist, CItems_S
     while ((getchar()) != '\n');
     switch(option){
     case 'y' : case 'Y':
+        typeslist.loadfromlist(typeslist);
         return 0;
         break;
     case 'n' : case 'N':

@@ -76,7 +76,7 @@ void sales_stats(CProduct_Type typeslist, CProduct productlist, CSale salelist, 
     case '4' :
         cout << "List all Sales." << endl;
         salelist.allsalesstats();
-        itemssalelist.salerevenue_total();
+        itemssalelist.salerevenue_total(typeslist,productlist);
         home(typeslist,productlist,salelist,itemssalelist,supplierslist,suppliersproductslist,orderslist,itemsorderslist);
         break;
     case '5' :
